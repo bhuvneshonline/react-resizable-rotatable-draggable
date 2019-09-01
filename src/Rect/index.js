@@ -145,6 +145,7 @@ export default class Rect extends PureComponent {
 
   render () {
     const {
+      className,
       styles: {
         position: { centerX, centerY },
         size: { width, height },
@@ -156,19 +157,20 @@ export default class Rect extends PureComponent {
       children
     } = this.props
     const style = {
-      width: Math.abs(width),
-      height: Math.abs(height),
+      width: (typeof width === 'undefined') ? 'auto' : Math.abs(width),
+      height: (typeof height === 'undefined') ? 'auto' : Math.abs(height),
       transform: `rotate(${rotateAngle}deg)`,
-      left: centerX - Math.abs(width) / 2,
-      top: centerY - Math.abs(height) / 2
+      left: centerX - Math.abs((typeof width === 'undefined') ? 0 : width) / 2,
+      top: centerY - Math.abs((typeof height === 'undefined') ? 0 : height) / 2
     }
     const direction = zoomable.split(',').map(d => d.trim()).filter(d => d) // TODO: may be speed up
 
+    console.log('centerx',centerX,centerY,width,height,style)
     return (
       <StyledRect
         ref={this.setElementRef}
         onMouseDown={this.startDrag}
-        className="rect single-resizer"
+        className={`rect single-resizer ${className}`}
         style={style}
       >
         {
